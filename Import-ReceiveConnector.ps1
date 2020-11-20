@@ -21,7 +21,9 @@ Catch {
 
 Foreach ($MyConnector in $ReceiveConnectors){
 
-    $Properties = @{    AcceptConsumerMail = $MyConnector.AcceptConsumerMail
+    $Properties = @{    
+                        Server = $Server              
+                        AcceptConsumerMail = $MyConnector.AcceptConsumerMail
                         AdvertiseClientSettings = $MyConnector.AdvertiseClientSettings
                         AuthMechanism = $MyConnector.AuthMechanism
                         AuthTarpitInterval = $MyConnector.AuthTarpitInterval
