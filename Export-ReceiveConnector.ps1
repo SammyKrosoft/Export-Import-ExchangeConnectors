@@ -5,6 +5,9 @@
        Import script will split the joined properties using ";" and add to the 
        destination Receive Connector object.
 
+       Note: the default export file will be saved in the current user's "My Documents" folder.
+       Use the -OutputFile parameter to change the default output file path and name.
+
 #>
 [CmdletBinding()]
 Param(
