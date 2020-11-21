@@ -13,7 +13,7 @@
 [CmdletBinding()]
 Param(
        [Parameter(Mandatory)][string]$Server,
-       [Parameter(Mandatory  = $false)]$OutputFile = "$($env:USERPROFILE)\Documents\ReceiveConnectorExport_$(Get-Date -Format yyyy-MM-dd-hh-mm-ss).csv"
+       [Parameter(Mandatory  = $false)][string]$OutputFile = "$($env:USERPROFILE)\Documents\ReceiveConnectorExport_$(Get-Date -Format yyyy-MM-dd-hh-mm-ss).csv"
 )
 
 $CustomObjectColl = @()

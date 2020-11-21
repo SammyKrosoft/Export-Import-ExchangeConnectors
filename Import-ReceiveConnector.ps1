@@ -6,7 +6,7 @@
 [CmdletBinding()]
 Param(
        [Parameter(Mandatory)][string]$Server,
-       [Parameter(Mandatory)]$InputFile
+       [Parameter(Mandatory)][string]$InputFile
 )
 
 Try{
