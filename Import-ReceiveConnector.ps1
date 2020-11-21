@@ -1,7 +1,12 @@
 <#
 .DESCRIPTION
        This is a script that import Receive Connectors from a CSV file on a server.
-       
+       You must use the CSV file created with the Export-ReceiveConnector.ps1 script
+
+.EXAMPLE
+.\Import-ReceiveConnector.ps1 -Server E2016-01 -InputFile .\Sample_Export.csv
+Creates the Receive Connector using the data in the Sample_Export.csv file.
+
 #>
 [CmdletBinding()]
 Param(
