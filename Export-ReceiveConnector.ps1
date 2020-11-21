@@ -8,6 +8,10 @@
        Note: the default export file will be saved in the current user's "My Documents" folder.
        Use the -OutputFile parameter to change the default output file path and name.
 
+.EXAMPLE
+.\Export-ReceiveConnector.ps1 -Server E2016-01 -OutputFile .\Sample_Export.csv
+Exports all receive connectors from server E2016-01, and saves the properties in the Sample_Export.csv file.
+This file can be re-used with the Import-ReceiveConnector to create a Receive Connector with the same properties on a different server.
 
 #>
 [CmdletBinding()]
