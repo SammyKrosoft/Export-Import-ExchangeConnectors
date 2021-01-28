@@ -16,7 +16,7 @@ This file can be re-used with the Import-ReceiveConnector to create a Receive Co
 #>
 [CmdletBinding()]
 Param(
-       [Parameter(Mandatory)][string]$Server,
+       [Parameter(Mandatory = $true)][string]$Server,
        [Parameter(Mandatory  = $false)]$OutputFile = "$($env:USERPROFILE)\Documents\ReceiveConnectorExport_$(Get-Date -Format yyyy-MM-dd-hh-mm-ss).csv"
 )
 
