@@ -9,15 +9,15 @@
        Use the -OutputFile parameter to change the default output file path and name.
 
 .EXAMPLE
-.\Export-ReceiveConnector.ps1 -Server E2016-01 -OutputFile .\Sample_Export.csv
-Exports all receive connectors from server E2016-01, and saves the properties in the Sample_Export.csv file.
-This file can be re-used with the Import-ReceiveConnector to create a Receive Connector with the same properties on a different server.
+       .\Export-ReceiveConnector.ps1 -Server E2016-01 -OutputFile .\Sample_Export.csv
+       Exports all Receive Connectors of server E2016-01 into a file named Sample_Export.csv file on the current directory.
+       This CSV file can be used with the Import-ReceiveConnectors.ps1 script to create the same connector on different servers.
 
 #>
 [CmdletBinding()]
 Param(
        [Parameter(Mandatory = $true)][string]$Server,
-       [Parameter(Mandatory  = $false)]$OutputFile = "$($env:USERPROFILE)\Documents\ReceiveConnectorExport_$(Get-Date -Format yyyy-MM-dd-hh-mm-ss).csv"
+       [Parameter(Mandatory = $false)][string]$OutputFile = "$($env:USERPROFILE)\Documents\ReceiveConnectorExport_$(Get-Date -Format yyyy-MM-dd-hh-mm-ss).csv"
 )
 
 $CustomObjectColl = @()

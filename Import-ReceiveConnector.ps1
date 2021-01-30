@@ -6,12 +6,12 @@
 .EXAMPLE
        .\Import-ReceiveConnector.ps1 -Server E2016-01 -InputFile .\Sample_Export.csv
        Creates the Receive Connector using the data in the Sample_Export.csv file.
-       
+
 #>
 [CmdletBinding()]
 Param(
        [Parameter(Mandatory)][string]$Server,
-       [Parameter(Mandatory)]$InputFile
+       [Parameter(Mandatory)][string]$InputFile
 )
 
 Try{
