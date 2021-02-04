@@ -4,8 +4,8 @@
        You must use the CSV file created with the Export-ReceiveConnector.ps1 script
 
 .EXAMPLE
-       .\Import-ReceiveConnector.ps1 -Server E2016-01 -InputFile .\Sample_Export.csv
-       Creates the Receive Connector using the data in the Sample_Export.csv file.
+.\Import-ReceiveConnector.ps1 -Server E2016-01 -InputFile .\Sample_Export.csv
+Creates the Receive Connector using the data in the Sample_Export.csv file.
 
 #>
 [CmdletBinding()]
@@ -25,68 +25,63 @@ Catch {
 
 
 Foreach ($MyConnector in $ReceiveConnectors){
-       Write-Host "Creating Connector $($MyConnector.Name) on server $Server" -BackgroundColor Yellow -ForegroundColor Blue
-       $Properties = @{    
-       AuthTarpitInterval = $MyConnector.AuthTarpitInterval
-       TarpitInterval = $MyConnector.TarpitInterval
-       MaxAcknowledgementDelay = $MyConnector.MaxAcknowledgementDelay
-       ConnectionInactivityTimeout = $MyConnector.ConnectionInactivityTimeout
-       ConnectionTimeout = $MyConnector.ConnectionTimeout
-       MaxInboundConnectionPercentagePerSource = $MyConnector.MaxInboundConnectionPercentagePerSource
-       MaxLogonFailures = $MyConnector.MaxLogonFailures
-       MaxProtocolErrors = $MyConnector.MaxProtocolErrors
-       MaxLocalHopCount = $MyConnector.MaxLocalHopCount
-       MaxInboundConnectionPerSource = $MyConnector.MaxInboundConnectionPerSource
-       MaxHopCount = $MyConnector.MaxHopCount
-       MaxRecipientsPerMessage = $MyConnector.MaxRecipientsPerMessage
-       MaxInboundConnection = $MyConnector.MaxInboundConnection
-       Name = $MyConnector.Name
- 
-       #DistinguishedName = $MyConnector.DistinguishedName #Parameter set automatically (combination of name, server, domain, ...)
-       Fqdn = $MyConnector.Fqdn
-       SizeEnabled = $MyConnector.SizeEnabled
-       TransportRole = $MyConnector.TransportRole
-       MessageRateSource = $MyConnector.MessageRateSource
-       ExtendedProtectionPolicy = $MyConnector.ExtendedProtectionPolicy
-       ProtocolLoggingLevel = $MyConnector.ProtocolLoggingLevel
-       AuthMechanism = $MyConnector.AuthMechanism
-       MessageRateLimit = $MyConnector.MessageRateLimit
-       #AcceptConsumerMail =  [System.Convert]::ToBoolean($($MyConnector.AcceptConsumerMail)) #Parameter reserved for internal Microsoft use
-       AdvertiseClientSettings =  [System.Convert]::ToBoolean($($MyConnector.AdvertiseClientSettings))
-       #BareLinefeedRejectionEnabled =  [System.Convert]::ToBoolean($($MyConnector.BareLinefeedRejectionEnabled)) #Parameter only available with Set-ReceiveConnector
-       DomainSecureEnabled =  [System.Convert]::ToBoolean($($MyConnector.DomainSecureEnabled))
-       EnableAuthGSSAPI =  [System.Convert]::ToBoolean($($MyConnector.EnableAuthGSSAPI))
-       #LiveCredentialEnabled =  [System.Convert]::ToBoolean($($MyConnector.LiveCredentialEnabled)) #Parameter reserved for internal Microsoft use
-       LongAddressesEnabled =  [System.Convert]::ToBoolean($($MyConnector.LongAddressesEnabled))
-       OrarEnabled =  [System.Convert]::ToBoolean($($MyConnector.OrarEnabled))
-       #ProxyEnabled =  [System.Convert]::ToBoolean($($MyConnector.ProxyEnabled)) #Parameter reserved for internal Microsoft use
-       RejectReservedSecondLevelRecipientDomains =  [System.Convert]::ToBoolean($($MyConnector.RejectReservedSecondLevelRecipientDomains))
-       RejectReservedTopLevelRecipientDomains =  [System.Convert]::ToBoolean($($MyConnector.RejectReservedTopLevelRecipientDomains))
-       RejectSingleLabelRecipientDomains =  [System.Convert]::ToBoolean($($MyConnector.RejectSingleLabelRecipientDomains))
-       RequireEHLODomain =  [System.Convert]::ToBoolean($($MyConnector.RequireEHLODomain))
-       RequireTLS =  [System.Convert]::ToBoolean($($MyConnector.RequireTLS))
-       SuppressXAnonymousTls =  [System.Convert]::ToBoolean($($MyConnector.SuppressXAnonymousTls))
-       BinaryMimeEnabled =  [System.Convert]::ToBoolean($($MyConnector.BinaryMimeEnabled))
-       ChunkingEnabled =  [System.Convert]::ToBoolean($($MyConnector.ChunkingEnabled))
-       DeliveryStatusNotificationEnabled =  [System.Convert]::ToBoolean($($MyConnector.DeliveryStatusNotificationEnabled))
-       EightBitMimeEnabled =  [System.Convert]::ToBoolean($($MyConnector.EightBitMimeEnabled))
-       Enabled =  [System.Convert]::ToBoolean($($MyConnector.Enabled))
-       EnhancedStatusCodesEnabled =  [System.Convert]::ToBoolean($($MyConnector.EnhancedStatusCodesEnabled))
-       PipeliningEnabled =  [System.Convert]::ToBoolean($($MyConnector.PipeliningEnabled))
-       #SmtpUtf8Enabled =  [System.Convert]::ToBoolean($($MyConnector.SmtpUtf8Enabled)) #Parameter reserved for internal Microsoft use
-       MaxHeaderSize = $($MyConnector.MaxHeaderSize) + "KB"
-       MaxMessageSize = $($MyConnector.MaxMessageSize) + "MB"
-       
-}
-
-IF(-not [string]::IsNullOrEmpty($($MyConnector.ServiceDiscoveryFqdn))){$properties.Add("ServiceDiscoveryFqdn",$($MyConnector.ServiceDiscoveryFqdn))}
-IF(-not [string]::IsNullOrEmpty($($MyConnector.TlsDomainCapabilities))){$properties.Add("TlsDomainCapabilities" , $($MyConnector.TlsDomainCapabilities -join ";"))}
-IF(-not [string]::IsNullOrEmpty($($MyConnector.Bindings))){$properties.Add("Bindings",$($MyConnector.Bindings -join ";"))}
-IF(-not [string]::IsNullOrEmpty($($MyConnector.RemoteIPRanges))){$properties.Add("RemoteIPRanges",$($MyConnector.RemoteIPRanges -join ";"))}
-IF(-not [string]::IsNullOrEmpty($($MyConnector.Banner))){$properties.Add("Banner",$($MyConnector.Banner))}
-IF(-not [string]::IsNullOrEmpty($($MyConnector.Comment))){$properties.Add("Comment",$($MyConnector.Comment))}
-IF(-not [string]::IsNullOrEmpty($($MyConnector.DefaultDomain))){$properties.Add("DefaultDomain",$($MyConnector.DefaultDomain))}
-IF(-not [string]::IsNullOrEmpty($($MyConnector.TlsCertificateName))){$properties.Add("TlsCertificateName",$($MyConnector.TlsCertificateName))}
+        Write-Host "Creating Connector $($MyConnector.Name) on server $Server" -BackgroundColor Yellow -ForegroundColor Blue
+        $Properties = @{}
+        If (-not [String]::IsNullOrEmpty($MyConnector.AuthTarpitInterval)){$Properties.Add("AuthTarpitInterval",$MyConnector.AuthTarpitInterval)}
+        If (-not [String]::IsNullOrEmpty($MyConnector.TarpitInterval)){$Properties.Add("TarpitInterval",$MyConnector.TarpitInterval)}
+        If (-not [String]::IsNullOrEmpty($MyConnector.MaxAcknowledgementDelay)){$Properties.Add("MaxAcknowledgementDelay",$MyConnector.MaxAcknowledgementDelay)}
+        If (-not [String]::IsNullOrEmpty($MyConnector.ConnectionInactivityTimeout)){$Properties.Add("ConnectionInactivityTimeout",$MyConnector.ConnectionInactivityTimeout)}
+        If (-not [String]::IsNullOrEmpty($MyConnector.ConnectionTimeout)){$Properties.Add("ConnectionTimeout",$MyConnector.ConnectionTimeout)}
+        If (-not [String]::IsNullOrEmpty($MyConnector.MaxInboundConnectionPercentagePerSource)){$Properties.Add("MaxInboundConnectionPercentagePerSource",$MyConnector.MaxInboundConnectionPercentagePerSource)}
+        If (-not [String]::IsNullOrEmpty($MyConnector.MaxLogonFailures)){$Properties.Add("MaxLogonFailures",$MyConnector.MaxLogonFailures)}
+        If (-not [String]::IsNullOrEmpty($MyConnector.MaxProtocolErrors)){$Properties.Add("MaxProtocolErrors",$MyConnector.MaxProtocolErrors)}
+        If (-not [String]::IsNullOrEmpty($MyConnector.MaxLocalHopCount)){$Properties.Add("MaxLocalHopCount",$MyConnector.MaxLocalHopCount)}
+        If (-not [String]::IsNullOrEmpty($MyConnector.MaxInboundConnectionPerSource)){$Properties.Add("MaxInboundConnectionPerSource",$MyConnector.MaxInboundConnectionPerSource)}
+        If (-not [String]::IsNullOrEmpty($MyConnector.MaxHopCount)){$Properties.Add("MaxHopCount",$MyConnector.MaxHopCount)}
+        If (-not [String]::IsNullOrEmpty($MyConnector.MaxRecipientsPerMessage)){$Properties.Add("MaxRecipientsPerMessage",$MyConnector.MaxRecipientsPerMessage)}
+        If (-not [String]::IsNullOrEmpty($MyConnector.MaxInboundConnection)){$Properties.Add("MaxInboundConnection",$MyConnector.MaxInboundConnection)}
+        If (-not [String]::IsNullOrEmpty($MyConnector.Name)){$Properties.Add("Name",$MyConnector.Name)}
+        #If (-not [String]::IsNullOrEmpty($MyConnector.Fqdn)){$Properties.Add("Fqdn",$MyConnector.Fqdn)}
+        If (-not [String]::IsNullOrEmpty($MyConnector.SizeEnabled)){$Properties.Add("SizeEnabled",$MyConnector.SizeEnabled)}
+        If (-not [String]::IsNullOrEmpty($MyConnector.TransportRole)){$Properties.Add("TransportRole",$MyConnector.TransportRole)}
+        If (-not [String]::IsNullOrEmpty($MyConnector.MessageRateSource)){$Properties.Add("MessageRateSource",$MyConnector.MessageRateSource)}
+        If (-not [String]::IsNullOrEmpty($MyConnector.ExtendedProtectionPolicy)){$Properties.Add("ExtendedProtectionPolicy",$MyConnector.ExtendedProtectionPolicy)}
+        If (-not [String]::IsNullOrEmpty($MyConnector.ProtocolLoggingLevel)){$Properties.Add("ProtocolLoggingLevel",$MyConnector.ProtocolLoggingLevel)}
+        If (-not [String]::IsNullOrEmpty($MyConnector.AuthMechanism)){
+        
+            If ($MyConnector.AuthMechanism -match "ExchangeServer"){$Properties.Add("Fqdn",$Server)}
+            $Properties.Add("AuthMechanism",$MyConnector.AuthMechanism)}        
+        
+        
+        If (-not [String]::IsNullOrEmpty($MyConnector.MessageRateLimit)){$Properties.Add("MessageRateLimit",$MyConnector.MessageRateLimit)}
+        If (-not [String]::IsNullOrEmpty($($MyConnector.AdvertiseClientSettings))){$Properties.Add("AdvertiseClientSettings",[System.Convert]::ToBoolean($($MyConnector.AdvertiseClientSettings)))}
+        If (-not [String]::IsNullOrEmpty($($MyConnector.DomainSecureEnabled))){$Properties.Add("DomainSecureEnabled",[System.Convert]::ToBoolean($($MyConnector.DomainSecureEnabled)))}
+        If (-not [String]::IsNullOrEmpty($($MyConnector.EnableAuthGSSAPI))){$Properties.Add("EnableAuthGSSAPI",[System.Convert]::ToBoolean($($MyConnector.EnableAuthGSSAPI)))}
+        If (-not [String]::IsNullOrEmpty($($MyConnector.LongAddressesEnabled))){$Properties.Add("LongAddressesEnabled",[System.Convert]::ToBoolean($($MyConnector.LongAddressesEnabled)))}
+        If (-not [String]::IsNullOrEmpty($($MyConnector.OrarEnabled))){$Properties.Add("OrarEnabled",[System.Convert]::ToBoolean($($MyConnector.OrarEnabled)))}
+        If (-not [String]::IsNullOrEmpty($($MyConnector.RejectReservedSecondLevelRecipientDomains))){$Properties.Add("RejectReservedSecondLevelRecipientDomains",[System.Convert]::ToBoolean($($MyConnector.RejectReservedSecondLevelRecipientDomains)))}
+        If (-not [String]::IsNullOrEmpty($($MyConnector.RejectReservedTopLevelRecipientDomains))){$Properties.Add("RejectReservedTopLevelRecipientDomains",[System.Convert]::ToBoolean($($MyConnector.RejectReservedTopLevelRecipientDomains)))}
+        If (-not [String]::IsNullOrEmpty($($MyConnector.RejectSingleLabelRecipientDomains))){$Properties.Add("RejectSingleLabelRecipientDomains",[System.Convert]::ToBoolean($($MyConnector.RejectSingleLabelRecipientDomains)))}
+        If (-not [String]::IsNullOrEmpty($($MyConnector.RequireEHLODomain))){$Properties.Add("RequireEHLODomain",[System.Convert]::ToBoolean($($MyConnector.RequireEHLODomain)))}
+        If (-not [String]::IsNullOrEmpty($($MyConnector.RequireTLS))){$Properties.Add("RequireTLS",[System.Convert]::ToBoolean($($MyConnector.RequireTLS)))}
+        If (-not [String]::IsNullOrEmpty($($MyConnector.SuppressXAnonymousTls))){$Properties.Add("SuppressXAnonymousTls",[System.Convert]::ToBoolean($($MyConnector.SuppressXAnonymousTls)))}
+        If (-not [String]::IsNullOrEmpty($($MyConnector.BinaryMimeEnabled))){$Properties.Add("BinaryMimeEnabled",[System.Convert]::ToBoolean($($MyConnector.BinaryMimeEnabled)))}
+        If (-not [String]::IsNullOrEmpty($($MyConnector.ChunkingEnabled))){$Properties.Add("ChunkingEnabled",[System.Convert]::ToBoolean($($MyConnector.ChunkingEnabled)))}
+        If (-not [String]::IsNullOrEmpty($($MyConnector.DeliveryStatusNotificationEnabled))){$Properties.Add("DeliveryStatusNotificationEnabled",[System.Convert]::ToBoolean($($MyConnector.DeliveryStatusNotificationEnabled)))}
+        If (-not [String]::IsNullOrEmpty($($MyConnector.EightBitMimeEnabled))){$Properties.Add("EightBitMimeEnabled",[System.Convert]::ToBoolean($($MyConnector.EightBitMimeEnabled)))}
+        If (-not [String]::IsNullOrEmpty($($MyConnector.Enabled))){$Properties.Add("Enabled",[System.Convert]::ToBoolean($($MyConnector.Enabled)))}
+        If (-not [String]::IsNullOrEmpty($($MyConnector.EnhancedStatusCodesEnabled))){$Properties.Add("EnhancedStatusCodesEnabled",[System.Convert]::ToBoolean($($MyConnector.EnhancedStatusCodesEnabled)))}
+        If (-not [String]::IsNullOrEmpty($($MyConnector.PipeliningEnabled))){$Properties.Add("PipeliningEnabled",[System.Convert]::ToBoolean($($MyConnector.PipeliningEnabled)))}
+        If (-not [String]::IsNullOrEmpty($($MyConnector.MaxHeaderSize) + "KB")){$Properties.Add("MaxHeaderSize",$($MyConnector.MaxHeaderSize) + "KB")}
+        If (-not [String]::IsNullOrEmpty($($MyConnector.MaxMessageSize) + "MB")){$Properties.Add("MaxMessageSize",$($MyConnector.MaxMessageSize) + "MB")}
+        IF(-not [string]::IsNullOrEmpty($($MyConnector.ServiceDiscoveryFqdn))){$properties.Add("ServiceDiscoveryFqdn",$($MyConnector.ServiceDiscoveryFqdn))}
+        IF(-not [string]::IsNullOrEmpty($($MyConnector.TlsDomainCapabilities))){$properties.Add("TlsDomainCapabilities" , $($MyConnector.TlsDomainCapabilities -split ";"))}
+        IF(-not [string]::IsNullOrEmpty($($MyConnector.Bindings))){$properties.Add("Bindings",$($MyConnector.Bindings -join ";"))}
+        IF(-not [string]::IsNullOrEmpty($($MyConnector.RemoteIPRanges))){$properties.Add("RemoteIPRanges",$($MyConnector.RemoteIPRanges -split ";"))}
+        IF(-not [string]::IsNullOrEmpty($($MyConnector.Banner))){$properties.Add("Banner",$($MyConnector.Banner))}
+        IF(-not [string]::IsNullOrEmpty($($MyConnector.Comment))){$properties.Add("Comment",$($MyConnector.Comment))}
+        IF(-not [string]::IsNullOrEmpty($($MyConnector.DefaultDomain))){$properties.Add("DefaultDomain",$($MyConnector.DefaultDomain))}
+        IF(-not [string]::IsNullOrEmpty($($MyConnector.TlsCertificateName))){$properties.Add("TlsCertificateName",$($MyConnector.TlsCertificateName))}
 
 #Bindings = ($MyConnector.Bindings -join ";")
 #RemoteIPRanges = ($MyConnector.RemoteIPRanges -join ";")
