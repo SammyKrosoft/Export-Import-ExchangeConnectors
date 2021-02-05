@@ -1,3 +1,33 @@
+<#PSScriptInfo
+
+.VERSION 1.0
+
+.GUID 31c04a6c-bbb1-4dd6-9204-5e6b89c2d426
+
+.AUTHOR sammy
+
+.COMPANYNAME 
+
+.COPYRIGHT 
+
+.TAGS 
+
+.LICENSEURI 
+
+.PROJECTURI 
+
+.ICONURI 
+
+.EXTERNALMODULEDEPENDENCIES 
+
+.REQUIREDSCRIPTS 
+
+.EXTERNALSCRIPTDEPENDENCIES 
+
+.RELEASENOTES
+
+#>
+
 <#
 .DESCRIPTION
        This is a script that exports Receive Connectors from a given server into
@@ -17,7 +47,7 @@
 [CmdletBinding()]
 Param(
        [Parameter(Mandatory = $true)][string]$Server,
-       [Parameter(Mandatory = $false)][string]$OutputFile = "$($env:USERPROFILE)\Documents\ReceiveConnectorExport_$(Get-Date -Format yyyy-MM-dd-hh-mm-ss).csv"
+       [Parameter(Mandatory = $false)][string]$OutputFile = "$($env:USERPROFILE)\Documents\ReceiveConnectorExport_$Server_$(Get-Date -Format yyyy-MM-dd-hh-mm-ss).csv"
 )
 
 $CustomObjectColl = @()

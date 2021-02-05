@@ -1,12 +1,42 @@
+<#PSScriptInfo
+
+.VERSION 1.0
+
+.GUID 31c04a6c-bbb1-4dd6-9204-5e6b89c2d426
+
+.AUTHOR sammy
+
+.COMPANYNAME 
+
+.COPYRIGHT 
+
+.TAGS 
+
+.LICENSEURI 
+
+.PROJECTURI 
+
+.ICONURI 
+
+.EXTERNALMODULEDEPENDENCIES 
+
+.REQUIREDSCRIPTS 
+
+.EXTERNALSCRIPTDEPENDENCIES 
+
+.RELEASENOTES
+
+
+#>
+
 <#
 .DESCRIPTION
        This is a script that import Receive Connectors from a CSV file on a server.
        You must use the CSV file created with the Export-ReceiveConnector.ps1 script
 
 .EXAMPLE
-.\Import-ReceiveConnector.ps1 -Server E2016-01 -InputFile .\Sample_Export.csv
-Creates the Receive Connector using the data in the Sample_Export.csv file.
-
+       .\Import-ReceiveConnector.ps1 -Server E2016-01 -InputFile .\Sample_Export.csv
+       Creates the Receive Connector using the data in the Sample_Export.csv file.
 #>
 [CmdletBinding()]
 Param(
@@ -21,8 +51,6 @@ Catch {
        Write-Host "Error trying to open file $InputFile"
        Exit
 }
-
-
 
 Foreach ($MyConnector in $ReceiveConnectors){
         Write-Host "Creating Connector $($MyConnector.Name) on server $Server" -BackgroundColor Yellow -ForegroundColor Blue
@@ -41,19 +69,17 @@ Foreach ($MyConnector in $ReceiveConnectors){
         If (-not [String]::IsNullOrEmpty($MyConnector.MaxRecipientsPerMessage)){$Properties.Add("MaxRecipientsPerMessage",$MyConnector.MaxRecipientsPerMessage)}
         If (-not [String]::IsNullOrEmpty($MyConnector.MaxInboundConnection)){$Properties.Add("MaxInboundConnection",$MyConnector.MaxInboundConnection)}
         If (-not [String]::IsNullOrEmpty($MyConnector.Name)){$Properties.Add("Name",$MyConnector.Name)}
-        #If (-not [String]::IsNullOrEmpty($MyConnector.Fqdn)){$Properties.Add("Fqdn",$MyConnector.Fqdn)}
         If (-not [String]::IsNullOrEmpty($MyConnector.SizeEnabled)){$Properties.Add("SizeEnabled",$MyConnector.SizeEnabled)}
         If (-not [String]::IsNullOrEmpty($MyConnector.TransportRole)){$Properties.Add("TransportRole",$MyConnector.TransportRole)}
         If (-not [String]::IsNullOrEmpty($MyConnector.MessageRateSource)){$Properties.Add("MessageRateSource",$MyConnector.MessageRateSource)}
         If (-not [String]::IsNullOrEmpty($MyConnector.ExtendedProtectionPolicy)){$Properties.Add("ExtendedProtectionPolicy",$MyConnector.ExtendedProtectionPolicy)}
         If (-not [String]::IsNullOrEmpty($MyConnector.ProtocolLoggingLevel)){$Properties.Add("ProtocolLoggingLevel",$MyConnector.ProtocolLoggingLevel)}
+
         If (-not [String]::IsNullOrEmpty($MyConnector.AuthMechanism)){
-        
             If ($MyConnector.AuthMechanism -match "ExchangeServer"){$Properties.Add("Fqdn",$Server)}
             $Properties.Add("AuthMechanism",$MyConnector.AuthMechanism)}        
-        
-        
-        If (-not [String]::IsNullOrEmpty($MyConnector.MessageRateLimit)){$Properties.Add("MessageRateLimit",$MyConnector.MessageRateLimit)}
+
+            If (-not [String]::IsNullOrEmpty($MyConnector.MessageRateLimit)){$Properties.Add("MessageRateLimit",$MyConnector.MessageRateLimit)}
         If (-not [String]::IsNullOrEmpty($($MyConnector.AdvertiseClientSettings))){$Properties.Add("AdvertiseClientSettings",[System.Convert]::ToBoolean($($MyConnector.AdvertiseClientSettings)))}
         If (-not [String]::IsNullOrEmpty($($MyConnector.DomainSecureEnabled))){$Properties.Add("DomainSecureEnabled",[System.Convert]::ToBoolean($($MyConnector.DomainSecureEnabled)))}
         If (-not [String]::IsNullOrEmpty($($MyConnector.EnableAuthGSSAPI))){$Properties.Add("EnableAuthGSSAPI",[System.Convert]::ToBoolean($($MyConnector.EnableAuthGSSAPI)))}
@@ -76,32 +102,17 @@ Foreach ($MyConnector in $ReceiveConnectors){
         If (-not [String]::IsNullOrEmpty($($MyConnector.MaxMessageSize) + "MB")){$Properties.Add("MaxMessageSize",$($MyConnector.MaxMessageSize) + "MB")}
         IF(-not [string]::IsNullOrEmpty($($MyConnector.ServiceDiscoveryFqdn))){$properties.Add("ServiceDiscoveryFqdn",$($MyConnector.ServiceDiscoveryFqdn))}
         IF(-not [string]::IsNullOrEmpty($($MyConnector.TlsDomainCapabilities))){$properties.Add("TlsDomainCapabilities" , $($MyConnector.TlsDomainCapabilities -split ";"))}
-        IF(-not [string]::IsNullOrEmpty($($MyConnector.Bindings))){$properties.Add("Bindings",$($MyConnector.Bindings -join ";"))}
+        IF(-not [string]::IsNullOrEmpty($($MyConnector.Bindings))){$properties.Add("Bindings",$($MyConnector.Bindings -split ";"))}
         IF(-not [string]::IsNullOrEmpty($($MyConnector.RemoteIPRanges))){$properties.Add("RemoteIPRanges",$($MyConnector.RemoteIPRanges -split ";"))}
         IF(-not [string]::IsNullOrEmpty($($MyConnector.Banner))){$properties.Add("Banner",$($MyConnector.Banner))}
         IF(-not [string]::IsNullOrEmpty($($MyConnector.Comment))){$properties.Add("Comment",$($MyConnector.Comment))}
         IF(-not [string]::IsNullOrEmpty($($MyConnector.DefaultDomain))){$properties.Add("DefaultDomain",$($MyConnector.DefaultDomain))}
         IF(-not [string]::IsNullOrEmpty($($MyConnector.TlsCertificateName))){$properties.Add("TlsCertificateName",$($MyConnector.TlsCertificateName))}
-
-#Bindings = ($MyConnector.Bindings -join ";")
-#RemoteIPRanges = ($MyConnector.RemoteIPRanges -join ";")
-#TlsDomainCapabilities = ($MyConnector.TlsDomainCapabilities -join ";")
-#Banner = $MyConnector.Banner
-# Comment = $MyConnector.Comment
-# DefaultDomain = $MyConnector.DefaultDomain
-#ServiceDiscoveryFqdn = $MyConnector.ServiceDiscoveryFqdn
-# TlsCertificateName = $MyConnector.TlsCertificateName
-
-If ($($MyConnector.PermissionGroups) -match 'Custom'){
-       Write-Host "Warning: This connector have AD Extended permissions like ms-Exch-SMTP-Accept-Any-Recipient or ms-Exch-SMTP-Accept-Any-Sender - please use Add-ADPermissions with the -ExtendedRights parameter" -ForegroundColor Yellow
-} Else {
-       IF(-not [string]::IsNullOrEmpty($($MyConnector.PermissionGroups))){$properties.Add("PermissionGroups",$($MyConnector.PermissionGroups))}
-}
-
-#PermissionGroups = $MyConnector.PermissionGroups
-
-
-#$Properties
+       If ($($MyConnector.PermissionGroups) -match 'Custom'){
+              Write-Host "Warning: This connector have AD Extended permissions like ms-Exch-SMTP-Accept-Any-Recipient or ms-Exch-SMTP-Accept-Any-Sender - please use Add-ADPermissions with the -ExtendedRights parameter" -ForegroundColor Yellow
+       } Else {
+              IF(-not [string]::IsNullOrEmpty($($MyConnector.PermissionGroups))){$properties.Add("PermissionGroups",$($MyConnector.PermissionGroups))}
+       }
 
 Try{
        New-ReceiveConnector -Server $Server @Properties -ErrorAction Stop
